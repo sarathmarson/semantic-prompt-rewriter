@@ -25,14 +25,14 @@ export default function PromptInput({ onSubmit, loading }) {
       <div className="sample-pills">
         <span className="pill-label">Try:</span>
         {Object.entries(SAMPLES).map(([label, text]) => (
-          <button key={label} className="pill" onClick={() => setPrompt(text)}>
+          <button key={label} className="pill" type="button" onClick={() => setPrompt(text)}>
             {label}
           </button>
         ))}
       </div>
       <button
         className="btn-rewrite"
-        onClick={() => onSubmit(prompt)}
+        onClick={() => onSubmit(prompt.trim())}
         disabled={!prompt.trim() || loading}
       >
         {loading ? 'Rewriting…' : '✨ Rewrite'}
