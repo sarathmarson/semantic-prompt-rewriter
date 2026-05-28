@@ -26,7 +26,7 @@ Paste any AI prompt into the left panel and click **✨ Rewrite**. Claude return
 ### 1. Clone
 
 ```bash
-git clone https://github.com/sarathmarson/semantic-prompt-rewriter.git
+git clone https://github.com/SarathMarson7/semantic-prompt-rewriter.git
 cd semantic-prompt-rewriter
 ```
 
