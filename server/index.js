@@ -39,7 +39,8 @@ app.post('/api/rewrite', async (req, res) => {
     })
 
     const raw = completion.choices[0].message.content
-    const data = JSON.parse(raw)
+    const jsonStr = raw.slice(raw.indexOf('{'), raw.lastIndexOf('}') + 1)
+    const data = JSON.parse(jsonStr)
 
     if (!data.rewritten || !data.explanation || !Array.isArray(data.changes)) {
       throw new Error('Unexpected response shape from model')
