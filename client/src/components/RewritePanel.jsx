@@ -4,9 +4,13 @@ export default function RewritePanel({ result, loading, error }) {
   const [copied, setCopied] = useState(false)
 
   async function handleCopy() {
-    await navigator.clipboard.writeText(result.rewritten)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1500)
+    try {
+      await navigator.clipboard.writeText(result?.rewritten ?? '')
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    } catch {
+      // clipboard unavailable (non-HTTPS or permission denied)
+    }
   }
 
   if (loading) {
@@ -74,7 +78,7 @@ export default function RewritePanel({ result, loading, error }) {
           <p className="explanation">{result.explanation}</p>
         )}
         <ul className="changes-list">
-          {result.changes.map((change, i) => (
+          {(result.changes ?? []).map((change, i) => (
             <li key={i}>{change}</li>
           ))}
         </ul>
