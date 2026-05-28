@@ -1,11 +1,11 @@
 import 'dotenv/config'
 import express from 'express'
-import Anthropic from '@anthropic-ai/sdk'
+import Groq from 'groq-sdk'
 
 const app = express()
 app.use(express.json())
 
-const client = new Anthropic()
+const client = new Groq()
 
 const SYSTEM_PROMPT = `You are a prompt engineering expert. The user will give you a rough AI prompt.
 Your task:
@@ -24,24 +24,26 @@ app.post('/api/rewrite', async (req, res) => {
   }
 
   try {
-    const message = await client.messages.create({
-      model: 'claude-haiku-4-5-20251001',
+    const completion = await client.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
       max_tokens: 1024,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: prompt }]
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: prompt }
+      ]
     })
 
-    const raw = message.content[0].text
+    const raw = completion.choices[0].message.content
     const data = JSON.parse(raw)
 
     if (!data.rewritten || !data.explanation || !Array.isArray(data.changes)) {
-      throw new Error('Unexpected response shape from Claude')
+      throw new Error('Unexpected response shape from model')
     }
 
     res.json(data)
   } catch (err) {
     if (err instanceof SyntaxError) {
-      return res.status(500).json({ error: 'Claude returned invalid JSON. Try again.' })
+      return res.status(500).json({ error: 'Model returned invalid JSON. Try again.' })
     }
     res.status(500).json({ error: err.message || 'Server error' })
   }
