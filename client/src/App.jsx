@@ -11,6 +11,7 @@ export default function App() {
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [lastPrompt, setLastPrompt] = useState('')
 
   function cycleTheme() {
     const next = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length]
@@ -19,6 +20,7 @@ export default function App() {
   }
 
   async function handleRewrite(prompt) {
+    setLastPrompt(prompt)
     setLoading(true)
     setError(null)
     setResult(null)
@@ -46,7 +48,7 @@ export default function App() {
       </header>
       <main className="app-grid">
         <PromptInput onSubmit={handleRewrite} loading={loading} />
-        <RewritePanel result={result} loading={loading} error={error} />
+        <RewritePanel result={result} loading={loading} error={error} onRetry={() => handleRewrite(lastPrompt)} />
       </main>
     </div>
   )

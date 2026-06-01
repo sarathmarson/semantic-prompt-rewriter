@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export default function RewritePanel({ result, loading, error }) {
+export default function RewritePanel({ result, loading, error, onRetry }) {
   const [copied, setCopied] = useState(false)
 
   async function handleCopy() {
@@ -39,6 +39,7 @@ export default function RewritePanel({ result, loading, error }) {
         <div className="zone">
           <span className="zone-label">Rewritten</span>
           <div className="error-msg">⚠️ {error}</div>
+          <button className="btn-retry" onClick={onRetry} type="button">↺ Try again</button>
         </div>
         <div className="zone">
           <span className="zone-label">Why It Changed</span>
@@ -68,9 +69,12 @@ export default function RewritePanel({ result, loading, error }) {
       <div className="zone">
         <span className="zone-label">Rewritten</span>
         <textarea className="rewritten-text" value={result.rewritten} readOnly />
-        <button className="btn-copy" onClick={handleCopy} type="button">
-          {copied ? '✓ Copied' : '📋 Copy'}
-        </button>
+        <div className="rewritten-meta">
+          <span className="word-count">{result.rewritten.trim().split(/\s+/).filter(Boolean).length} words</span>
+          <button className="btn-copy" onClick={handleCopy} type="button">
+            {copied ? '✓ Copied' : '📋 Copy'}
+          </button>
+        </div>
       </div>
       <div className="zone">
         <span className="zone-label">Why It Changed</span>
