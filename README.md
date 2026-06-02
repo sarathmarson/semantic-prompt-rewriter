@@ -6,6 +6,16 @@ Third in a trilogy: [prompt-quality-checker](https://github.com/SarathMarson7/pr
 
 ---
 
+## Screenshots
+
+### Before and After — Weak Prompt Rewritten
+
+The left panel shows your original prompt. After clicking **✨ Rewrite**, the center panel shows the improved version and the right panel lists exactly what changed and why.
+
+> Screenshots coming soon — run locally to see the full UI.
+
+---
+
 ## What It Does
 
 Paste any AI prompt into the left panel and click **✨ Rewrite**. The model returns:
@@ -35,6 +45,7 @@ Each project in this series teaches a different way to think about AI prompts:
 ### Prerequisites
 
 - Node.js 18 or later
+- npm 9 or later
 - A free [Groq API key](https://console.groq.com) — no credit card required
 
 ### 1. Clone
@@ -146,6 +157,13 @@ The Express server acts as a proxy so the `GROQ_API_KEY` is never exposed to the
 | `ci.yml` | Every push and PR | `npm ci` → `npm run build` |
 | `release.yml` | Tag `v*.*.*` | `npm ci` → `npm run build` → deploy to GitHub Pages |
 
+### Deploy a new version
+
+```bash
+git tag v1.x.x
+git push origin v1.x.x
+```
+
 > **Note:** The live GitHub Pages URL hosts the static frontend only. Rewriting prompts requires running locally with a valid `GROQ_API_KEY`.
 
 ---
@@ -161,3 +179,30 @@ The Express server acts as a proxy so the `GROQ_API_KEY` is never exposed to the
 | CSS Custom Properties | Light / Grey / Dark themes |
 | GitHub Actions | CI and release automation |
 | GitHub Pages | Static hosting (frontend only) |
+
+---
+
+## Troubleshooting
+
+**Rewrite button does nothing / network error**
+
+Two servers must run simultaneously: Vite on `:5173` and Express on `:3001`. `npm run dev` starts both. If port `3001` is taken:
+
+```bash
+# macOS / Linux
+lsof -ti:3001 | xargs kill
+
+# Windows
+netstat -ano | findstr :3001
+taskkill /PID <PID> /F
+```
+
+**`GROQ_API_KEY` not found**
+
+Ensure `.env` is at the repo root (not inside `client/` or `server/`) and that you copied from `.env.example`, not renamed it.
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE) for details.
