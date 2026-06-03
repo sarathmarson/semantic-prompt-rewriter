@@ -6,8 +6,9 @@ export default defineConfig({
   plugins: [react()],
   base: process.env.NODE_ENV === 'production' ? '/semantic-prompt-rewriter/' : '/',
   server: {
+    port: 5175,
     proxy: {
-      '/api': 'http://localhost:3001'
+      '/api': 'http://localhost:3002'
     }
   },
   build: {
